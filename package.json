@@ -1,0 +1,20 @@
+{
+  "name": "regex-pipeline-visualizer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "正则 → NFA → DFA → 最小化 DFA 教学流水线",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n server,web -c blue,green \"npm run dev -w backend\" \"npm run dev -w frontend\"",
+    "build": "npm run build -w backend && npm run build -w frontend",
+    "start": "npm run start -w backend",
+    "test": "npm run test -w backend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "typescript": "^5.6.3"
+  }
+}
