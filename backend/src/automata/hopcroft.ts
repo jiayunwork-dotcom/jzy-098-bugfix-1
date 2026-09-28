@@ -70,9 +70,11 @@ export class HopcroftMinimizer {
       const splitter = this.blocks.find((b) => b.id === splitterId)!;
 
       for (const c of this.reps) {
-        // 每换一个字符都重新审视当前所有块（拆分产生的新块也要被检查）
-        const candidates = this.blocks.filter((b) => b.id !== splitter.id);
-        for (const x of candidates) {
+        // 每换一个字符都重新审视当前所有块（拆分产生的新块也要被检查）。
+        // 注意试金石块自身也必须在候选中：pre_c(B) 同样可以把 B 自己切开
+        // （例如“死状态对 c 自环、同块另一状态对 c 走出本块”的情形），
+        // 跳过它会导致本可区分的状态被错误合并。
+        for (const x of this.blocks) {
           const into: number[] = [];
           const out: number[] = [];
           for (const s of x.members) {
