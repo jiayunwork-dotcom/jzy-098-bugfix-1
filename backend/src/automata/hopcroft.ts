@@ -70,8 +70,11 @@ export class HopcroftMinimizer {
       const splitter = this.blocks.find((b) => b.id === splitterId)!;
 
       for (const c of this.reps) {
-        // 每换一个字符都重新审视当前所有块（拆分产生的新块也要被检查）
-        const candidates = this.blocks.filter((b) => b.id !== splitter.id);
+        // 每换一个字符都重新审视当前所有块（拆分产生的新块也要被检查）。
+        // 注意试金石块自己也要被检查：若它内部一部分状态读 c 后回到自身、
+        // 另一部分不回到自身，它同样必须被拆开（标准 Hopcroft 的“每个 Y∈P”包含 A 自身）。
+        // slice 得到的是当前块的快照，本轮拆分新增的块留待后续试金石处理。
+        const candidates = this.blocks.slice();
         for (const x of candidates) {
           const into: number[] = [];
           const out: number[] = [];
